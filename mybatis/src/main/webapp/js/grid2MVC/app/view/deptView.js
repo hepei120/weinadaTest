@@ -1,0 +1,70 @@
+Ext.define("AM.view.deptView",{
+    extend:'Ext.tree.Panel',
+    alias:'widget.deptTree',
+    title:'部门树',
+    height:300,
+    width:250,
+    padding:'5 3 3 10',
+    rootVisible:false,//隐藏root节点
+    dockedItems:[{
+        xtype:'toolbar',
+        dock:'left',
+        //ui:'footer',
+        items:[
+           {xtype:'button',text:'add',id:'add'},
+           {xtype:'button',text:'copy',id:'copy'},
+           {xtype:'button',text:'delete',id:'delete'}
+        ]
+    },{
+        xtype:'toolbar',
+        items:[{
+            xtype:'button',
+            id:'allopen',
+            text:'展开全部'
+            
+        },{
+            xtype:'button',
+            id:'allclose',
+            text:'全部收起'
+        
+        }]
+    }],
+    root:{
+        text:'root',
+        id:'0',
+        leaf:false,
+        children:[{
+            checked:false,//单选框
+            text:'技术部门',
+	        id:'01',
+	        children:[{
+	        	checked:false,
+	            text:'研发部',
+		        id:'0101',
+		        leaf:true
+	        },{
+	            checked:false,
+	            text:'实施部',
+		        id:'0102',
+		        leaf:true
+	        }]
+        },{
+            checked:false,
+            text:'后勤部',
+	        id:'02',
+	        leaf:false,
+	        children:[{
+		          checked:false,
+		          text:' 人事部',
+			      id:'0201',
+			      leaf:true
+		     },{
+		          checked:false,
+		          text:'行政部',
+			      id:'0202',
+			      leaf:true
+		     }]
+         }]
+       
+      }  
+});

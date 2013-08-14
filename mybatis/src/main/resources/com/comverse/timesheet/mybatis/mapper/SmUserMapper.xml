@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comverse.timesheet.web.impl.SmUserDaoImpl" >
+  <resultMap id="BaseResultMap" type="com.comverse.timesheet.web.bean.SmUser" >
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="DATE" />
+    <result column="LAST_UPD_BY" property="lastUpdBy" jdbcType="VARCHAR" />
+    <result column="LAST_UPD_DATE" property="lastUpdDate" jdbcType="DATE" />
+    <result column="MODIFICATION_NUM" property="modificationNum" jdbcType="INTEGER" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="USER_CODE" property="userCode" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="USER_GROUP_ID" property="userGroupId" jdbcType="INTEGER" />
+    <result column="USER_GROUP_STATUS_FLAG" property="userGroupStatusFlag" jdbcType="INTEGER" />
+    <result column="TAXIS_NO" property="taxisNo" jdbcType="INTEGER" />
+    <result column="USER_INFORMATION_ID" property="userInformationId" jdbcType="INTEGER" />
+    <result column="USER_SECURITY_ID" property="userSecurityId" jdbcType="INTEGER" />
+    <result column="USER_HOME_BLOCK" property="userHomeBlock" jdbcType="VARCHAR" />
+    <result column="IS_DELETE" property="isDelete" jdbcType="INTEGER" />
+    <result column="ACTIVE_FLAG" property="activeFlag" jdbcType="INTEGER" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="FORWARDNEXT" property="forwardnext" jdbcType="INTEGER" />
+  </resultMap>
+  <!-- <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql> -->
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, CREATED_BY, CREATED_DATE, LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM, USER_NAME, 
+    USER_CODE, PASSWORD, USER_GROUP_ID, USER_GROUP_STATUS_FLAG, TAXIS_NO, USER_INFORMATION_ID, 
+    USER_SECURITY_ID, USER_HOME_BLOCK, IS_DELETE, ACTIVE_FLAG, REMARK, FORWARDNEXT
+  </sql>
+  
+  
+  <select id="select" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sm_user t 
+		<trim suffixOverrides="and">
+			<where>
+				<if test="(userName!=null) and (userName!='')"> USER_NAME like #{userName} and </if>
+			</where>
+		</trim>
+		<if test="offset!=null and limit">
+		LIMIT #{offset},#{limit}
+		</if>  
+		
+	</select>
+  
+  
+ 
+  <insert id="add" parameterType="com.comverse.timesheet.web.bean.SmUser" >
+    insert into sm_user (ID, CREATED_BY, CREATED_DATE, 
+      LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM, 
+      USER_NAME, USER_CODE, PASSWORD, 
+      USER_GROUP_ID, USER_GROUP_STATUS_FLAG, TAXIS_NO, 
+      USER_INFORMATION_ID, USER_SECURITY_ID, USER_HOME_BLOCK, 
+      IS_DELETE, ACTIVE_FLAG, REMARK, 
+      FORWARDNEXT)
+    values (#{id,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=DATE}, 
+      #{lastUpdBy,jdbcType=VARCHAR}, #{lastUpdDate,jdbcType=DATE}, #{modificationNum,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{userGroupId,jdbcType=INTEGER}, #{userGroupStatusFlag,jdbcType=INTEGER}, #{taxisNo,jdbcType=INTEGER}, 
+      #{userInformationId,jdbcType=INTEGER}, #{userSecurityId,jdbcType=INTEGER}, #{userHomeBlock,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=INTEGER}, #{activeFlag,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{forwardnext,jdbcType=INTEGER})
+  </insert>
+ 
+ <!--  <update id="update" parameterType="com.comverse.timesheet.web.bean.SmUser" >
+    update sm_user
+    <set >
+      <if test="id != null" >
+        ID = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=DATE},
+      </if>
+      <if test="lastUpdBy != null" >
+        LAST_UPD_BY = #{lastUpdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdDate != null" >
+        LAST_UPD_DATE = #{lastUpdDate,jdbcType=DATE},
+      </if>
+      <if test="modificationNum != null" >
+        MODIFICATION_NUM = #{modificationNum,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userCode != null" >
+        USER_CODE = #{userCode,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="userGroupId != null" >
+        USER_GROUP_ID = #{userGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="userGroupStatusFlag != null" >
+        USER_GROUP_STATUS_FLAG = #{userGroupStatusFlag,jdbcType=INTEGER},
+      </if>
+      <if test="taxisNo != null" >
+        TAXIS_NO = #{taxisNo,jdbcType=INTEGER},
+      </if>
+      <if test="userInformationId != null" >
+        USER_INFORMATION_ID = #{userInformationId,jdbcType=INTEGER},
+      </if>
+      <if test="userSecurityId != null" >
+        USER_SECURITY_ID = #{userSecurityId,jdbcType=INTEGER},
+      </if>
+      <if test="userHomeBlock != null" >
+        USER_HOME_BLOCK = #{userHomeBlock,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        IS_DELETE = #{isDelete,jdbcType=INTEGER},
+      </if>
+      <if test="activeFlag != null" >
+        ACTIVE_FLAG = #{activeFlag,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="forwardnext != null" >
+        FORWARDNEXT = #{forwardnext,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update> -->
+  
+  <update id="update" parameterType="com.comverse.timesheet.web.bean.SmUser">
+		update sm_user set
+		<trim suffixOverrides=",">
+			<if test="userName!=null">USER_NAME =#{userName}, </if>
+			<if test="userCode!=null">USER_CODE=#{userCode}</if>
+		</trim>
+		<where>id=#{id}</where>
+	</update>
+	
+  <delete id="delete" parameterType="long">
+		delete from sm_user where id=#{id}
+	</delete>
+  
+  <!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	 	<if test="userName != null and userName != ''" >
+	     and USER_NAME like CONCAT('%', #{userName}, '%')
+	</if>
+	 <if test="userCode != null and userCode != ''" >
+	    and USER_CODE like CONCAT('%', #{userCode}, '%')
+	</if>
+	
+</trim>
+</sql>
+
+	<!-- 系统用户 列表总数 -->
+	<select id="queryByCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from sm_user
+		 <trim suffixOverrides="and">
+			<where>
+				<if test="(userName!=null) and (userName!='')"> USER_NAME like #{userName} and </if>
+			</where>
+		</trim>
+
+		<!-- <include refid="Example_Where_Clause"/> -->
+	</select>
+	
+	<!-- 查询系统用户列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from sm_user 
+	<include refid="Example_Where_Clause"/>
+	<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      ${pager.orderCondition}
+    </if>
+    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+       ${pager.mysqlQueryCondition}
+    </if>
+</select>
+
+</mapper>

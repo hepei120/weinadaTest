@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comverse.timesheet.web.impl.SmMenuDaoImpl" >
+  <resultMap id="BaseResultMap" type="com.comverse.timesheet.web.bean.SmMenu" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="LAST_UPD_BY" property="lastUpdBy" jdbcType="VARCHAR" />
+    <result column="MODIFICATION_NUM" property="modificationNum" jdbcType="INTEGER" />
+    <result column="MENU_CODE" property="menuCode" jdbcType="VARCHAR" />
+    <result column="MENU_NAME" property="text" jdbcType="VARCHAR" />
+    <result column="MENU_TYPE" property="menuType" jdbcType="INTEGER" />
+    <result column="MENU_LEVEL" property="menuLevel" jdbcType="INTEGER" />
+    <result column="PARENT_ID" property="parentId" jdbcType="INTEGER" />
+    <result column="MENU_LINK" property="hrefTarget" jdbcType="VARCHAR" />
+    <result column="TAXIS_NO" property="taxisNo" jdbcType="INTEGER" />
+    <result column="ACTIVE_FLAG" property="activeFlag" jdbcType="INTEGER" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+   <!-- 查询父组织 -->  
+    <association property="parentMenu" column="PARENT_ID" select="selectOne" />  
+     <!-- 查询子组织 -->  
+    <collection property="children" column="id" select="getChildrenMenus" />  
+  </resultMap>
+  
+   <resultMap id="TreeResultMap" type="com.comverse.timesheet.web.bean.SmMenu" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="MENU_CODE" property="menuCode" jdbcType="VARCHAR" />
+    <result column="MENU_NAME" property="text" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="INTEGER" />
+    <result column="MENU_LINK" property="hrefTarget" jdbcType="VARCHAR" />
+   <!-- 查询父组织 -->  
+    <association property="parentMenu" column="PARENT_ID" select="selectOne" />  
+     <!-- 查询子组织 -->  
+    <collection property="children" column="id" select="getChildrenMenus" />  
+  </resultMap>
+  
+   <select id="queryByList" resultMap="TreeResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sm_menu t where PARENT_ID=0
+	</select>
+  
+  <select id="selectOne" parameterType="int" resultMap="TreeResultMap">  
+        select * from sm_menu where 1= 0  
+    </select>  
+      
+    <select id="getChildrenMenus" parameterType="int" resultMap="TreeResultMap">  
+        select * from sm_menu where PARENT_ID = #{id}  
+    </select>  
+  
+ 
+  <sql id="Base_Column_List" >
+    ID, CREATED_BY, LAST_UPD_BY, MODIFICATION_NUM, MENU_CODE, MENU_NAME, MENU_TYPE, MENU_LEVEL, 
+    PARENT_ID, MENU_LINK, TAXIS_NO, ACTIVE_FLAG, REMARK
+  </sql>
+  
+ <!--  <select id="selectOne" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sm_menu
+    where ID = #{id,jdbcType=INTEGER}
+  </select> -->
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from sm_menu
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.comverse.timesheet.web.bean.SmMenu" >
+    insert into sm_menu (ID, CREATED_BY, LAST_UPD_BY, 
+      MODIFICATION_NUM, MENU_CODE, MENU_NAME, 
+      MENU_TYPE, MENU_LEVEL, PARENT_ID, 
+      MENU_LINK, TAXIS_NO, ACTIVE_FLAG, 
+      REMARK)
+    values (#{id,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{lastUpdBy,jdbcType=VARCHAR}, 
+      #{modificationNum,jdbcType=INTEGER}, #{menuCode,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, 
+      #{menuType,jdbcType=INTEGER}, #{menuLevel,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, 
+      #{menuLink,jdbcType=VARCHAR}, #{taxisNo,jdbcType=INTEGER}, #{activeFlag,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  
+  <select id="queryByCount" parameterType="com.comverse.timesheet.web.bean.SmMenu" resultType="java.lang.Integer" >
+    select count(*) from sm_menu
+    
+  </select>
+  
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.comverse.timesheet.web.bean.SmMenu" >
+    update sm_menu
+    <set >
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdBy != null" >
+        LAST_UPD_BY = #{lastUpdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modificationNum != null" >
+        MODIFICATION_NUM = #{modificationNum,jdbcType=INTEGER},
+      </if>
+      <if test="menuCode != null" >
+        MENU_CODE = #{menuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuType != null" >
+        MENU_TYPE = #{menuType,jdbcType=INTEGER},
+      </if>
+      <if test="menuLevel != null" >
+        MENU_LEVEL = #{menuLevel,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="menuLink != null" >
+        MENU_LINK = #{menuLink,jdbcType=VARCHAR},
+      </if>
+      <if test="taxisNo != null" >
+        TAXIS_NO = #{taxisNo,jdbcType=INTEGER},
+      </if>
+      <if test="activeFlag != null" >
+        ACTIVE_FLAG = #{activeFlag,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="update" parameterType="com.comverse.timesheet.web.bean.SmMenu" >
+    update sm_menu
+    set CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      LAST_UPD_BY = #{lastUpdBy,jdbcType=VARCHAR},
+      MODIFICATION_NUM = #{modificationNum,jdbcType=INTEGER},
+      MENU_CODE = #{menuCode,jdbcType=VARCHAR},
+      MENU_NAME = #{menuName,jdbcType=VARCHAR},
+      MENU_TYPE = #{menuType,jdbcType=INTEGER},
+      MENU_LEVEL = #{menuLevel,jdbcType=INTEGER},
+      PARENT_ID = #{parentId,jdbcType=INTEGER},
+      MENU_LINK = #{menuLink,jdbcType=VARCHAR},
+      TAXIS_NO = #{taxisNo,jdbcType=INTEGER},
+      ACTIVE_FLAG = #{activeFlag,jdbcType=INTEGER},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+     <select id="select" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sm_menu t 
+		
+	</select>
+</mapper>

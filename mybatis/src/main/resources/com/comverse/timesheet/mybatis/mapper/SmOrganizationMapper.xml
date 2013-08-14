@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comverse.timesheet.web.impl.SmOrganizationDaoImpl" >
+  <resultMap id="BaseResultMap" type="com.comverse.timesheet.web.bean.SmOrganization" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="LAST_UPD_BY" property="lastUpdBy" jdbcType="VARCHAR" />
+    <result column="LAST_UPD_DATE" property="lastUpdDate" jdbcType="TIMESTAMP" />
+    <result column="MODIFICATION_NUM" property="modificationNum" jdbcType="INTEGER" />
+    <result column="USER_GROUP_NAME" property="userGroupName" jdbcType="VARCHAR" />
+    <result column="PARENT_USER_GROUP_ID" property="parentUserGroupId" jdbcType="INTEGER" />
+    <result column="TYPE_FLAG" property="typeFlag" jdbcType="INTEGER" />
+    <result column="GROUP_LEVEL" property="groupLevel" jdbcType="VARCHAR" />
+    <result column="NAME_PATH" property="namePath" jdbcType="VARCHAR" />
+    <result column="ID_PATH" property="idPath" jdbcType="VARCHAR" />
+    <result column="TAXIS_NO" property="taxisNo" jdbcType="INTEGER" />
+    <result column="ACTIVE_FLAG" property="activeFlag" jdbcType="INTEGER" />
+    <result column="ISROOT" property="isroot" jdbcType="INTEGER" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+     <!-- 查询父组织 -->  
+    <association property="parentOrg" column="PARENT_USER_GROUP_ID" select="selectOne" />  
+     <!-- 查询子组织 -->  
+    <collection property="smOrganizationList" column="id" select="getChildrenOrg" />  
+  </resultMap>
+  
+  
+  <select id="selectOne" parameterType="int" resultMap="BaseResultMap">  
+        select * from sm_organization where 1= 0  
+    </select>  
+      
+    <select id="getChildrenOrg" parameterType="int" resultMap="BaseResultMap">  
+        select * from sm_organization where PARENT_USER_GROUP_ID = #{id}  
+    </select>  
+  
+  <sql id="Base_Column_List" >
+    ID, CREATED_BY, CREATED_DATE, LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM, USER_GROUP_NAME, 
+    PARENT_USER_GROUP_ID, TYPE_FLAG, GROUP_LEVEL, NAME_PATH, ID_PATH, TAXIS_NO, ACTIVE_FLAG, 
+    ISROOT, REMARK
+  </sql>
+  
+
+  <delete id="delete" parameterType="java.lang.Integer" >
+    delete from sm_organization
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="add" parameterType="com.comverse.timesheet.web.bean.SmOrganization" >
+    insert into sm_organization (ID, CREATED_BY, CREATED_DATE, 
+      LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM, 
+      USER_GROUP_NAME, PARENT_USER_GROUP_ID, TYPE_FLAG, 
+      GROUP_LEVEL, NAME_PATH, ID_PATH, 
+      TAXIS_NO, ACTIVE_FLAG, ISROOT, 
+      REMARK)
+    values (#{id,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{lastUpdBy,jdbcType=VARCHAR}, #{lastUpdDate,jdbcType=TIMESTAMP}, #{modificationNum,jdbcType=INTEGER}, 
+      #{userGroupName,jdbcType=VARCHAR}, #{parentUserGroupId,jdbcType=INTEGER}, #{typeFlag,jdbcType=INTEGER}, 
+      #{groupLevel,jdbcType=VARCHAR}, #{namePath,jdbcType=VARCHAR}, #{idPath,jdbcType=VARCHAR}, 
+      #{taxisNo,jdbcType=INTEGER}, #{activeFlag,jdbcType=INTEGER}, #{isroot,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  
+	<!-- 系统用户 列表总数 -->
+	<select id="queryByCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from sm_organization
+	</select>
+ 
+    <select id="select" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sm_organization t 
+		LIMIT #{offset},#{limit}
+	</select>
+	
+      <select id="queryByList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sm_organization t where t.id=1
+	</select>
+  
+ 
+  <update id="update" parameterType="com.comverse.timesheet.web.bean.SmOrganization" >
+    update sm_organization
+    <set >
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdBy != null" >
+        LAST_UPD_BY = #{lastUpdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdDate != null" >
+        LAST_UPD_DATE = #{lastUpdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modificationNum != null" >
+        MODIFICATION_NUM = #{modificationNum,jdbcType=INTEGER},
+      </if>
+      <if test="userGroupName != null" >
+        USER_GROUP_NAME = #{userGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentUserGroupId != null" >
+        PARENT_USER_GROUP_ID = #{parentUserGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="typeFlag != null" >
+        TYPE_FLAG = #{typeFlag,jdbcType=INTEGER},
+      </if>
+      <if test="groupLevel != null" >
+        GROUP_LEVEL = #{groupLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="namePath != null" >
+        NAME_PATH = #{namePath,jdbcType=VARCHAR},
+      </if>
+      <if test="idPath != null" >
+        ID_PATH = #{idPath,jdbcType=VARCHAR},
+      </if>
+      <if test="taxisNo != null" >
+        TAXIS_NO = #{taxisNo,jdbcType=INTEGER},
+      </if>
+      <if test="activeFlag != null" >
+        ACTIVE_FLAG = #{activeFlag,jdbcType=INTEGER},
+      </if>
+      <if test="isroot != null" >
+        ISROOT = #{isroot,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+ 
+</mapper>

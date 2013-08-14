@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.comverse.timesheet.web.impl.SmRoleDaoImpl" >
+  <resultMap id="BaseResultMap" type="com.comverse.timesheet.web.bean.SmRole" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="DATE" />
+    <result column="LAST_UPD_BY" property="lastUpdBy" jdbcType="VARCHAR" />
+    <result column="LAST_UPD_DATE" property="lastUpdDate" jdbcType="DATE" />
+    <result column="MODIFICATION_NUM" property="modificationNum" jdbcType="INTEGER" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+    <result column="ROLE_CODE" property="roleCode" jdbcType="VARCHAR" />
+    <result column="TAXIS_NO" property="taxisNo" jdbcType="INTEGER" />
+    <result column="ACTIVE_FLAG" property="activeFlag" jdbcType="INTEGER" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ID, CREATED_BY, CREATED_DATE, LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM, ROLE_NAME, 
+    ROLE_CODE, TAXIS_NO, ACTIVE_FLAG, REMARK
+  </sql>
+ 
+  <insert id="add" parameterType="com.comverse.timesheet.web.bean.SmRole" >
+    insert into sm_role (ID, CREATED_BY, CREATED_DATE, 
+      LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM, 
+      ROLE_NAME, ROLE_CODE, TAXIS_NO, 
+      ACTIVE_FLAG, REMARK)
+    values (#{id,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=DATE}, 
+      #{lastUpdBy,jdbcType=VARCHAR}, #{lastUpdDate,jdbcType=DATE}, #{modificationNum,jdbcType=INTEGER}, 
+      #{roleName,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR}, #{taxisNo,jdbcType=INTEGER}, 
+      #{activeFlag,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  
+   <select id="select" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sm_role t 
+		
+	</select>
+  
+  <update id="update" parameterType="com.comverse.timesheet.web.bean.SmRole">
+		update sm_role set
+		<trim suffixOverrides=",">
+			<if test="roleName!=null">ROLE_NAME =#{roleName}, </if>
+			<if test="roleCode!=null">ROLE_CODE=#{roleCode}</if>
+		</trim>
+		<where>id=#{id}</where>
+	</update>
+	
+    <delete id="delete" parameterType="long">
+		delete from sm_role where id=#{id}
+	</delete>
+	
+    <!-- 系统用户 列表总数 -->
+	<select id="queryByCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from sm_role
+	</select>
+</mapper>
